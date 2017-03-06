@@ -37,7 +37,12 @@ There are Node.js apps running the background that are filtering and processing 
   
 ## Adding a new theme
 1. create a new .js file in the `p5-visuals` folder and name it according to your theme, eg: `my_lovely_theme.js`
-2. define a function in this file give the function the name you want your theme to have, eg: `function my_lovely_theme() { }`
+2. define a function in this file give the function the name you want your theme to have, eg: 
+```
+function my_lovely_theme() {
+  // p5 code goes here
+}
+```
   - access the data by calling properties from the **muse** object, eg: x-accelertometer data is at `muse.x`, while the four-value array of sensor data for the alpha waves is at `muse.alpha`, etc.
 3. add a `<script>` tag in the `p5-visuals/index.html` file to load your theme
 4. set up a new keyboard shortcut for your theme in the `p5-visuals/sketch.js` file
