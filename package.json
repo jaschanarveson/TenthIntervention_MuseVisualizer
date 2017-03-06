@@ -1,0 +1,15 @@
+{
+  "name": "tenth_intervention_muse_visualizer",
+  "version": "1.0.0",
+  "description": "a visualizer for the muse headband, for use with Tenth Intervention's concert on May 5th",
+  "main": "receive-fwd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jascha Narveson",
+  "license": "ISC",
+  "dependencies": {
+    "osc": "^2.2.0",
+    "ws": "^2.2.0"
+  }
+}
