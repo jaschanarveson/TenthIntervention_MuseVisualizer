@@ -43,6 +43,6 @@ function my_lovely_theme() {
   // p5 code goes here
 }
 ```
-- access the data by calling properties from the **muse** object, eg: x-accelertometer data is at `muse.x`, while the four-value array of sensor data for the alpha waves is at `muse.alpha`, etc.
+- access the data by calling properties from the **muse** object, eg: x-accelerometer data is at `muse.x`, while the four-value array of sensor data for the alpha waves is at `muse.alpha`, etc.
 - add a `<script>` tag in the `p5-visuals/index.html` file to load your theme
 - set up a new keyboard shortcut for your theme in the `p5-visuals/sketch.js` file
