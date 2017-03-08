@@ -100,7 +100,7 @@ function setup() {
     // this one was made by a constructor, so we refer to its .draw function
     funcs['2'] = ikeda_lines.draw;
 
-    funcs['3'] = bezier_lines;
+    funcs['3'] = bezier_lines_2;
     funcs['4'] = color_grid;
 }
 
