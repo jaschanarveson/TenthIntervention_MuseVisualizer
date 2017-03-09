@@ -67,7 +67,7 @@ var textOverlay; // boolean indicating the presence or absence of text overlay f
 function setup() {
     createCanvas(windowWidth, windowHeight); // resizeable canvas (see windowResized() func at bottom)
 
-    frameRate(30);
+    frameRate(60);
 
     textOverlay = true; // start with text overlay, just for reassurance that everything's working
 
