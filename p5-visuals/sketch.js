@@ -67,7 +67,7 @@ var textOverlay; // boolean indicating the presence or absence of text overlay f
 function setup() {
     createCanvas(windowWidth, windowHeight); // resizeable canvas (see windowResized() func at bottom)
 
-    frameRate(30);
+    frameRate(60);
 
     textOverlay = true; // start with text overlay, just for reassurance that everything's working
 
@@ -133,52 +133,52 @@ function overlayDataOnScreen() {
 
 function receiveOsc(address, args) {
     switch (address) {
-    case '/muse/acc':
-        muse.x = args[0];
-        muse.y = args[1];
-        muse.z = args[2];
-        break;
-    case '/muse/elements/jaw_clench':
-        muse.jaw = args[0];
-        break;
-    case '/muse/elements/blink':
-        muse.blink = args[0];
-        break;
-    case '/muse/elements/experimental/concentration':
-        muse.concentration = args[0];
-        break;
-    case '/muse/elements/experimental/mellow':
-        muse.mellow = args[0];
-        break;
+        case '/muse/acc':
+            muse.x = args[0];
+            muse.y = args[1];
+            muse.z = args[2];
+            break;
+        case '/muse/elements/jaw_clench':
+            muse.jaw = args[0];
+            break;
+        case '/muse/elements/blink':
+            muse.blink = args[0];
+            break;
+        case '/muse/elements/experimental/concentration':
+            muse.concentration = args[0];
+            break;
+        case '/muse/elements/experimental/mellow':
+            muse.mellow = args[0];
+            break;
 
-            
-        /*
+
+            /*
 For the band arrays, appA.js is adding the average of the 4-element array to the end before sending, so these cases just .pop() it off and put it in the appropriate spot, leaving the original 4-value args[] array 
          */
 
-    case '/muse/elements/delta_session_score':
-        muse.bandAverages.delta = args.pop(); // peel off the average
-        muse.delta = args; // this is the original 4-value array now
-        break;
-    case '/muse/elements/theta_session_score':
-        muse.bandAverages.theta = args.pop();
-        muse.theta = args;
-        break;
-    case '/muse/elements/alpha_session_score':
-        muse.bandAverages.alpha = args.pop();
-        muse.alpha = args;
-        break;
-    case '/muse/elements/beta_session_score':
-        muse.bandAverages.beta = args.pop();
-        muse.beta = args;
-        break;
-    case '/muse/elements/gamma_session_score':
-        muse.bandAverages.gamma = args.pop();
-        muse.gamma = args;
-        break;
+        case '/muse/elements/delta_session_score':
+            muse.bandAverages.delta = args.pop(); // peel off the average
+            muse.delta = args; // this is the original 4-value array now
+            break;
+        case '/muse/elements/theta_session_score':
+            muse.bandAverages.theta = args.pop();
+            muse.theta = args;
+            break;
+        case '/muse/elements/alpha_session_score':
+            muse.bandAverages.alpha = args.pop();
+            muse.alpha = args;
+            break;
+        case '/muse/elements/beta_session_score':
+            muse.bandAverages.beta = args.pop();
+            muse.beta = args;
+            break;
+        case '/muse/elements/gamma_session_score':
+            muse.bandAverages.gamma = args.pop();
+            muse.gamma = args;
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 

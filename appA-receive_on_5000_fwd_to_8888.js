@@ -82,9 +82,11 @@ udp.on("message", function (message, timeTag, info) {
     ) {
         // add the avg to the end of the band's args array (for fun)
         // for other tweaks to the array, modify the process_band_args() function below
+
         process_band_args(message);
         log_message(message);
-        interpolate_args_from_10_Hz_to_60_Hz(message);
+        interpolate_args_newVersion(message);
+        store_current_args_as_previous_args(message);
 
 
         // concentration and mellow get interpolated from 10Hz to 60Hz
@@ -93,7 +95,8 @@ udp.on("message", function (message, timeTag, info) {
         message.address === "/muse/elements/experimental/mellow"
     ) {
         log_message(message);
-        interpolate_args_from_10_Hz_to_60_Hz(message);
+        interpolate_args_newVersion(message);
+        store_current_args_as_previous_args(message);
     }
 
 });
@@ -137,6 +140,9 @@ function log_message(msg) {
     }
     // update the lastTime in high-res format for the next delta calculation...
     lastTimes[msg.address] = process.hrtime();
+}
+
+function store_current_args_as_previous_args(msg) {
     lastVals[msg.address] = msg.args; // store the args array for reference
 }
 
@@ -150,12 +156,18 @@ function process_band_args(msg) {
     msg.args.push(avg);
 }
 
-
-function interpolate_args_from_10_Hz_to_60_Hz(msg) {
+function interpolate_args_newVersion(msg) {
     var repeats = 6; // ie: send 6 messages for every one we get at 10Hz
-    var waitTime = timeDifferences[msg.address] / repeats;
-    var prevValues = lastVals[msg.address];
+    var waitTime = timeDifferences[msg.address];
+
+    // if prevValues is undefined (ie: this is the first message), just the the current args
+    var prevValues = lastVals[msg.address] || msg.args;
     var targetValues = msg.args;
+
+//    console.log("\n\n\n\n");
+//    console.log("1.    current: " + targetValues);
+//    console.log("2.   previous: " + prevValues);
+//    console.log("3. wait times: " + waitTime);
 
     // determine how much each value in the args array needs to travel in the interpolation
     var deltas = targetValues.map(function (val, i) {
@@ -167,6 +179,8 @@ function interpolate_args_from_10_Hz_to_60_Hz(msg) {
         return d / repeats
     });
 
+   // console.log("- - - - - interpolated:");
+
     // then send 6 (or 'repeats' number) of messages with the incremental changes
     for (var rep = 0; rep < repeats; rep++) {
 
@@ -175,14 +189,20 @@ function interpolate_args_from_10_Hz_to_60_Hz(msg) {
             return prev + (steps[i] * (rep + 1));
         });
 
-        // set up a bunch of functions to fire in the future at intervals of waitTime milliseconds
-        setTimeout(function () {
-            udp.send({
-                address: msg.address,
-                args: interpolatedValues
-            });
-        }, waitTime * rep);
+        // send out the interpolated osc messages at the appropriate time delays
+
+        send_osc_at_time_delay(msg.address, interpolatedValues, waitTime * rep);
     }
+}
+
+function send_osc_at_time_delay(oscAddress, oscArgs, tDelay) {
+    setTimeout(function () {
+//        console.log(oscArgs);
+        udp.send({
+            address: oscAddress,
+            args: oscArgs
+        });
+    }, tDelay);
 }
 
 function average_band_vals(msg) {
