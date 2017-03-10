@@ -19,9 +19,20 @@ var udp = new osc.UDPPort({
     remotePort: 8888 // on port 8888
 });
 
-var lastTimes = {};
-var timeDifferences = {};
-var lastVals = {};
+var incomingValues = {};
+var snapshot = {};
+var lastSnapshot = {};
+var oscPaths = [
+    "/muse/elements/delta_session_score",
+    "/muse/elements/theta_session_score",
+    "/muse/elements/alpha_session_score",
+    "/muse/elements/beta_session_score",
+    "/muse/elements/gamma_session_score",
+    "/muse/elements/experimental/concentration",
+    "/muse/elements/experimental/mellow"
+];
+
+
 
 /*
 incoming osc data:
@@ -85,8 +96,6 @@ udp.on("message", function (message, timeTag, info) {
 
         process_band_args(message);
         log_message(message);
-        interpolate_args_newVersion(message);
-        store_current_args_as_previous_args(message);
 
 
         // concentration and mellow get interpolated from 10Hz to 60Hz
@@ -95,8 +104,6 @@ udp.on("message", function (message, timeTag, info) {
         message.address === "/muse/elements/experimental/mellow"
     ) {
         log_message(message);
-        interpolate_args_newVersion(message);
-        store_current_args_as_previous_args(message);
     }
 
 });
@@ -126,26 +133,21 @@ function simple_forwarding(msg) {
     });
 }
 
-
 function log_message(msg) {
-    // get the time of msg arrival and log the delta in 'timeDifferences'
-    // (unless this is the very first message we're getting, in which case just
-    // put log the arrival time and wait for #2 onward)
-    if (lastTimes[msg.address] !== undefined) {
-        // get the delta in high-resolution time (nanoseconds)
-        var diff = process.hrtime(lastTimes[msg.address]);
-
-        // convert from nanoseconds to regular millliseconds
-        timeDifferences[msg.address] = (diff[0] * 1000) + (diff[1] / 1000000);
-    }
-    // update the lastTime in high-res format for the next delta calculation...
-    lastTimes[msg.address] = process.hrtime();
+    incomingValues[msg.address] = msg.args;
 }
 
-function store_current_args_as_previous_args(msg) {
-    lastVals[msg.address] = msg.args; // store the args array for reference
+function move_snapshot_to_lastSnapshot() {
+    for (var i = 0; i < oscPaths.length; i++) {
+        lastSnapshot[oscPaths[i]] = snapshot[oscPaths[i]];
+    };
 }
 
+function take_snapshot() {
+    for (var i = 0; i < oscPaths.length; i++) {
+        snapshot[oscPaths[i]] = incomingValues[oscPaths[i]];
+    };
+}
 
 // this function adds the average to the end of the 4-value band_session_score arg array
 function process_band_args(msg) {
@@ -156,55 +158,6 @@ function process_band_args(msg) {
     msg.args.push(avg);
 }
 
-function interpolate_args_newVersion(msg) {
-    var repeats = 6; // ie: send 6 messages for every one we get at 10Hz
-    var waitTime = timeDifferences[msg.address];
-
-    // if prevValues is undefined (ie: this is the first message), just the the current args
-    var prevValues = lastVals[msg.address] || msg.args;
-    var targetValues = msg.args;
-
-//    console.log("\n\n\n\n");
-//    console.log("1.    current: " + targetValues);
-//    console.log("2.   previous: " + prevValues);
-//    console.log("3. wait times: " + waitTime);
-
-    // determine how much each value in the args array needs to travel in the interpolation
-    var deltas = targetValues.map(function (val, i) {
-        return val - prevValues[i]
-    });
-
-    // and what the step-size should be...
-    var steps = deltas.map(function (d) {
-        return d / repeats
-    });
-
-   // console.log("- - - - - interpolated:");
-
-    // then send 6 (or 'repeats' number) of messages with the incremental changes
-    for (var rep = 0; rep < repeats; rep++) {
-
-        // figure out intermediate values for each tick of the clock
-        var interpolatedValues = prevValues.map(function (prev, i) {
-            return prev + (steps[i] * (rep + 1));
-        });
-
-        // send out the interpolated osc messages at the appropriate time delays
-
-        send_osc_at_time_delay(msg.address, interpolatedValues, waitTime * rep);
-    }
-}
-
-function send_osc_at_time_delay(oscAddress, oscArgs, tDelay) {
-    setTimeout(function () {
-//        console.log(oscArgs);
-        udp.send({
-            address: oscAddress,
-            args: oscArgs
-        });
-    }, tDelay);
-}
-
 function average_band_vals(msg) {
     var ray = msg.args.map(function (num) {
         return num * 1
@@ -212,7 +165,6 @@ function average_band_vals(msg) {
     var avg = (ray[0] + ray[1] + ray[2] + ray[3]) / 4;
     msg.args = [avg];
 }
-
 
 function prec(num) {
     var st = "" + Math.floor(num * 1000) / 1000;
