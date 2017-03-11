@@ -11,6 +11,8 @@ The OSC is forwarded to port 8888, where appB.js is listening and passing it on 
 */
 
 var osc = require("osc");
+var timedQueueModule = require("./app-timedQueue.js");
+var timeQueue = timedQueueModule();
 
 var udp = new osc.UDPPort({
     localAddress: "127.0.0.1", // receive locally from muse.io
@@ -18,6 +20,7 @@ var udp = new osc.UDPPort({
     remoteAddress: "127.0.0.1", // send remotely to the p5 computer (insert appropriate address here)
     remotePort: 8888 // on port 8888
 });
+
 
 var incomingValues = {};
 var snapshot = {};
