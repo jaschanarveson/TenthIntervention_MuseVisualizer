@@ -154,13 +154,32 @@ function take_snapshot() {
 function create_deltas() {
     for (var i = 0; i < oscPaths.length; i++) {
         var prop = oscPaths[i];
-        deltas[prop] = snapshot[prop].map(function(sn, i) {return lastSnapshot[prop][i] - sn});
+        deltas[prop] = snapshot[prop].map(function (currentVal, i) {
+            return lastSnapshot[prop][i] - currentVal
+        });
     }
 }
 
 function send_out_interpolated_values(totalTime, intervals) {
-    var waitTime = totalTime / intervals || 100 / 6;
+    totalTime = totalTime || 100; // set default of 100ms
+    intervals = intervals || 6; // set default of 6 repeats
+    var waitTime = totalTime / intervals;
     create_deltas();
+    for (var stepNum = 0; stepNum < intervals; stepNum++) {  // for each interpoloated step...
+        var packets = [];                                    // gather up all the packets in a bundle
+        for (var j = 0; j < oscPaths.length; j++) {          // path by path
+            var oscAddr = oscPaths[j];
+            var singlePacket = {};
+            var oscArgs = lastSnapshot[oscAddr].map(
+                function (val, indx) {
+                    return val + (deltas[oscAddr] * stepNum)
+                }
+            );
+            singlePacket.address = oscAddr;
+            singlePacket.args = oscArgs;
+            packets.push(singlePacket);   // add the packet to the bundle
+        }
+    };
 
 }
 
