@@ -11,6 +11,7 @@ The OSC is forwarded to port 8888, where appB.js is listening and passing it on 
 */
 
 var osc = require("osc");
+var forEach = require("for-each");
 var timedQueueModule = require("./app-timedQueue.js");
 var timeQueue = timedQueueModule();
 
