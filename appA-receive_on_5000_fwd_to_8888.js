@@ -22,6 +22,8 @@ var udp = new osc.UDPPort({
 var incomingValues = {};
 var snapshot = {};
 var lastSnapshot = {};
+var deltas = {};
+
 var oscPaths = [
     "/muse/elements/delta_session_score",
     "/muse/elements/theta_session_score",
@@ -147,6 +149,19 @@ function take_snapshot() {
     for (var i = 0; i < oscPaths.length; i++) {
         snapshot[oscPaths[i]] = incomingValues[oscPaths[i]];
     };
+}
+
+function create_deltas() {
+    for (var i = 0; i < oscPaths.length; i++) {
+        var prop = oscPaths[i];
+        deltas[prop] = snapshot[prop].map(function(sn, i) {return lastSnapshot[prop][i] - sn});
+    }
+}
+
+function send_out_interpolated_values(totalTime, intervals) {
+    var waitTime = totalTime / intervals || 100 / 6;
+    create_deltas();
+
 }
 
 // this function adds the average to the end of the 4-value band_session_score arg array
