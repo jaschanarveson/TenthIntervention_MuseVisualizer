@@ -15,9 +15,9 @@ udp.on("ready", function () {
 udp.on("bundle", function (oscBundle) {
     console.log("- - - - - - - - - ");
     console.log(oscBundle.timeTag);
-    forEach(oscBundle.packets, function(value, index, array) {
-        console.log(value.address + ' ' + value.args );
-    });
+//    forEach(oscBundle.packets, function(value, index, array) {
+//        console.log(value.address + ' ' + value.args );
+//    });
 });
 
 
