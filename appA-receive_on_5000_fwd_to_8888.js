@@ -12,8 +12,7 @@ The OSC is forwarded to port 8888, where appB.js is listening and passing it on 
 
 var osc = require("osc");
 var forEach = require("for-each");
-var timedQueueModule = require("./app-timedQueue.js");
-var timeQueue = timedQueueModule();
+var timedOscBundleQueue = bundleQueue();
 
 var udp = new osc.UDPPort({
     localAddress: "127.0.0.1", // receive locally from muse.io
@@ -64,7 +63,6 @@ f (boolean: 0 or 1) 10Hz
 
 
 udp.on("message", function (message, timeTag, info) {
-
     // certain functions are logged (see log_message() below) to
     // keep track of arrival times, to allow for interpolation
     // from slow 10Hz receipt time to a smoother 60Hz send-time.
@@ -99,7 +97,6 @@ udp.on("message", function (message, timeTag, info) {
     ) {
         // add the avg to the end of the band's args array (for fun)
         // for other tweaks to the array, modify the process_band_args() function below
-
         process_band_args(message);
         log_message(message);
 
@@ -127,10 +124,28 @@ udp.on("ready", function () {
     console.log("    Host: " + udp.options.remoteAddress);
     console.log("    Port: " + udp.options.remotePort);
     console.log("----------------------------------------");
+    setTimeout(function () {
+        console.log("Taking initial snapshot...");
+        take_snapshot();
+        console.log(snapshot);
+        console.log("Here are the incoming values that were snapshotted:");
+        console.log(incomingValues);
+        start_interpolation_loop();
+    }, 2000);
 });
 
 // - - - - - functions - - - - - - 
 
+function start_interpolation_loop() {
+    console.log("Starting to send interpolated OSC data...");
+    setInterval(function () {
+        move_snapshot_to_lastSnapshot();
+        take_snapshot();
+        create_deltas(); // determine the diffs between current and previous snapshot
+        send_out_a_round_of_interpolated_values(100, 6); // send out 6 OSC bundles of interpolated data in 100ms
+    }, 100);
+
+}
 
 function simple_forwarding(msg) {
     udp.send({
@@ -144,34 +159,32 @@ function log_message(msg) {
 }
 
 function move_snapshot_to_lastSnapshot() {
-    for (var i = 0; i < oscPaths.length; i++) {
-        lastSnapshot[oscPaths[i]] = snapshot[oscPaths[i]];
-    };
+    forEach(snapshot, function (value, key, obj) {
+        lastSnapshot[key] = snapshot[key];
+    })
 }
 
 function take_snapshot() {
-    for (var i = 0; i < oscPaths.length; i++) {
-        snapshot[oscPaths[i]] = incomingValues[oscPaths[i]];
-    };
+    forEach(incomingValues, function (value, key, obj) {
+        snapshot[key] = value;
+    });
 }
 
 function create_deltas() {
-    for (var i = 0; i < oscPaths.length; i++) {
-        var prop = oscPaths[i];
-        deltas[prop] = snapshot[prop].map(function (currentVal, i) {
-            return lastSnapshot[prop][i] - currentVal
+    forEach(snapshot, function (value, key, obj) {
+        deltas[key] = snapshot[key].map(function (currentVal, i) {
+            return lastSnapshot[key][i] - currentVal;
         });
-    }
+    });
 }
 
-function send_out_interpolated_values(totalTime, intervals) {
+function send_out_a_round_of_interpolated_values(totalTime, intervals) {
     totalTime = totalTime || 100; // set default of 100ms
     intervals = intervals || 6; // set default of 6 repeats
     var waitTime = totalTime / intervals;
-    create_deltas();
-    for (var stepNum = 0; stepNum < intervals; stepNum++) {  // for each interpoloated step...
-        var packets = [];                                    // gather up all the packets in a bundle
-        for (var j = 0; j < oscPaths.length; j++) {          // path by path
+    for (var stepNum = 0; stepNum < intervals; stepNum++) { // for each interpoloated step...
+        var packets = []; // gather up all the packets in a bundle
+        for (var j = 0; j < oscPaths.length; j++) { // path by path
             var oscAddr = oscPaths[j];
             var singlePacket = {};
             var oscArgs = lastSnapshot[oscAddr].map(
@@ -181,16 +194,17 @@ function send_out_interpolated_values(totalTime, intervals) {
             );
             singlePacket.address = oscAddr;
             singlePacket.args = oscArgs;
-            packets.push(singlePacket);   // add the packet to the bundle
+            packets.push(singlePacket); // add the packet to the bundle
         }
+        timedOscBundleQueue.add(udp, packets, waitTime);
     };
-
+    timedOscBundleQueue.start();
 }
 
 // this function adds the average to the end of the 4-value band_session_score arg array
 function process_band_args(msg) {
-    var sum = msg.args.reduce(function (acc, val) {
-        return acc + val
+    var sum = msg.args.reduce(function (accum, val) {
+        return accum + val
     }, 0);
     var avg = sum / 4;
     msg.args.push(avg);
@@ -212,3 +226,47 @@ function prec(num) {
     st = st.slice(0, 5);
     return st;
 }
+
+function bundleQueue() {
+    var API; // internal referance to interface
+    const queue = []; // array to hold functions
+    var task = null; // the next task to run
+    var tHandle; // To stop pending timeout
+    function next() { // runs current scheduled task and  creates timeout to schedule next
+        if (task !== null) { // is task scheduled??
+            task.udpPort.send({
+                timeTag: osc.timeTag(),
+                packets: task.packets
+            });
+            task = null; // clear task
+        }
+        if (queue.length > 0) { // are there any remain tasks??
+            task = queue.shift(); // yes set as next task
+            tHandle = setTimeout(next, task.time) // schedual when
+        } else {
+            API.done = true;
+        }
+    }
+    return API = {
+        add: function (udpPort, packets, time) {
+            queue.push({
+                udpPort: udpPort,
+                packets: packets,
+                time: time
+            });
+        },
+        start: function () {
+            if (queue.length > 0 && API.done) {
+                API.done = false; // set state flag
+                tHandle = setTimeout(next, 0);
+            }
+        },
+        clear: function () {
+            task = null; // remove pending task
+            queue.length = 0; // empty queue
+            clearTimeout(tHandle); // clear timeout
+            API.done = true; // set state flag
+        },
+        done: true,
+    }
+};
