@@ -37,6 +37,8 @@ var oscPaths = [
     "/muse/elements/experimental/mellow"
 ];
 
+var oscMessagesHaveArrived = false;
+
 
 
 /*
@@ -97,6 +99,7 @@ udp.on("message", function (message, timeTag, info) {
     ) {
         // add the avg to the end of the band's args array (for fun)
         // for other tweaks to the array, modify the process_band_args() function below
+        oscMessagesHaveArrived = true;
         process_band_args(message);
         log_message(message);
 
@@ -124,15 +127,25 @@ udp.on("ready", function () {
     console.log("    Host: " + udp.options.remoteAddress);
     console.log("    Port: " + udp.options.remotePort);
     console.log("----------------------------------------");
-    setTimeout(function () {
+
+    wait_for_first_message();
+});
+
+function wait_for_first_message() {
+    console.log("waiting for first messages to arrive...");
+    if (oscMessagesHaveArrived) {
         console.log("Taking initial snapshot...");
         take_snapshot();
         console.log(snapshot);
         console.log("Here are the incoming values that were snapshotted:");
         console.log(incomingValues);
         start_interpolation_loop();
-    }, 2000);
-});
+    } else {
+        setTimeout(function() {
+            wait_for_first_message();
+        }, 500);
+    }
+}
 
 // - - - - - functions - - - - - - 
 
