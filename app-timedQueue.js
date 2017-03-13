@@ -1,11 +1,14 @@
-module.exports = function app_timedQueue() {
+module.exports = function bundleQueue() {
     var API; // internal referance to interface
     const queue = []; // array to hold functions
     var task = null; // the next task to run
     var tHandle; // To stop pending timeout
     function next() { // runs current scheduled task and  creates timeout to schedule next
         if (task !== null) { // is task scheduled??
-            task.func(task.arg, task.num); // run it
+            task.udpPort.send({
+                timeTag: osc.timeTag(),
+                packets: task.packets
+            });
             task = null; // clear task
         }
         if (queue.length > 0) { // are there any remain tasks??
@@ -16,11 +19,10 @@ module.exports = function app_timedQueue() {
         }
     }
     return API = {
-        add: function (func, arg, num, time) {
+        add: function (udpPort, packets, time) {
             queue.push({
-                func: func,
-                arg: arg,
-                num: num,
+                udpPort: udpPort,
+                packets: packets,
                 time: time
             });
         },
