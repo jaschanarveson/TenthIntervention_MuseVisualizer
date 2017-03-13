@@ -84,19 +84,14 @@ udp.on("message", function (message, timeTag, info) {
         // for other tweaks to the array, modify the process_band_args() function below
 
         process_band_args(message);
-        log_message(message);
-        interpolate_args_newVersion(message);
-        store_current_args_as_previous_args(message);
-
+        simple_forwarding(message);  // no interpolation for now
 
         // concentration and mellow get interpolated from 10Hz to 60Hz
     } else if (
         message.address === "/muse/elements/experimental/concentration" ||
         message.address === "/muse/elements/experimental/mellow"
     ) {
-        log_message(message);
-        interpolate_args_newVersion(message);
-        store_current_args_as_previous_args(message);
+        process_band_args(message);  // no interpolation for now
     }
 
 });
@@ -164,10 +159,10 @@ function interpolate_args_newVersion(msg) {
     var prevValues = lastVals[msg.address] || msg.args;
     var targetValues = msg.args;
 
-//    console.log("\n\n\n\n");
-//    console.log("1.    current: " + targetValues);
-//    console.log("2.   previous: " + prevValues);
-//    console.log("3. wait times: " + waitTime);
+    //    console.log("\n\n\n\n");
+    //    console.log("1.    current: " + targetValues);
+    //    console.log("2.   previous: " + prevValues);
+    //    console.log("3. wait times: " + waitTime);
 
     // determine how much each value in the args array needs to travel in the interpolation
     var deltas = targetValues.map(function (val, i) {
@@ -179,7 +174,7 @@ function interpolate_args_newVersion(msg) {
         return d / repeats
     });
 
-   // console.log("- - - - - interpolated:");
+    // console.log("- - - - - interpolated:");
 
     // then send 6 (or 'repeats' number) of messages with the incremental changes
     for (var rep = 0; rep < repeats; rep++) {
@@ -197,7 +192,7 @@ function interpolate_args_newVersion(msg) {
 
 function send_osc_at_time_delay(oscAddress, oscArgs, tDelay) {
     setTimeout(function () {
-//        console.log(oscArgs);
+        //        console.log(oscArgs);
         udp.send({
             address: oscAddress,
             args: oscArgs
