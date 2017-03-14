@@ -33,6 +33,11 @@ var wss = new WebSocket.Server({
     port: 8081
 });
 
+udp.on("bundle", function(bundle, timetag, info){
+    console.log("appB got this:\n");
+    console.log(bundle.packets);
+});
+
 wss.on("connection", function (socket) {
     console.log("WebSocket established!");
     var socketPort = new osc.WebSocketPort({
@@ -40,6 +45,6 @@ wss.on("connection", function (socket) {
     });
 
     var relay = new osc.Relay(udp, socketPort, {
-        raw: true
+        raw: false
     });
 });

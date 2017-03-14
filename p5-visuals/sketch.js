@@ -32,11 +32,11 @@ port.on("message", function (message) {
 });
 
 port.on("bundle", function (bundle, timetag, info) {
+    console.log(bundle);
     if (bundle.timeTag.native > lastTime) {
         lastTime = bundle.timeTag.native;
         for(var i = 0; i < bundle.packets.length; i++) {
             var packet = bundle.packets[i];
-            console.log(packet);
             receiveOsc(packet.address, packet.args);
         }
     }

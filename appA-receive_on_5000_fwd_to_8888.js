@@ -136,12 +136,12 @@ function wait_for_first_message() {
     if (oscMessagesHaveArrived) {
         console.log("Taking initial snapshot...");
         take_snapshot();
-        console.log(snapshot);
+//        console.log(snapshot);
         console.log("Here are the incoming values that were snapshotted:");
-        console.log(incomingValues);
+//        console.log(incomingValues);
         start_interpolation_loop();
     } else {
-        setTimeout(function() {
+        setTimeout(function () {
             wait_for_first_message();
         }, 500);
     }
@@ -151,12 +151,12 @@ function wait_for_first_message() {
 
 function start_interpolation_loop() {
     console.log("Starting to send interpolated OSC data...");
-    setInterval(function () {
+  //  setInterval(function () {
         move_snapshot_to_lastSnapshot();
         take_snapshot();
         create_deltas(); // determine the diffs between current and previous snapshot
         send_out_a_round_of_interpolated_values(100, 6); // send out 6 OSC bundles of interpolated data in 100ms
-    }, 100);
+    //}, 100);
 
 }
 
@@ -197,18 +197,17 @@ function send_out_a_round_of_interpolated_values(totalTime, intervals) {
     var waitTime = totalTime / intervals;
     for (var stepNum = 0; stepNum < intervals; stepNum++) { // for each interpoloated step...
         var packets = []; // gather up all the packets in a bundle
-        for (var j = 0; j < oscPaths.length; j++) { // path by path
-            var oscAddr = oscPaths[j];
+        forEach(lastSnapshot, function (value, key, obj) {
             var singlePacket = {};
-            var oscArgs = lastSnapshot[oscAddr].map(
+            var oscArgs = lastSnapshot[key].map(
                 function (val, indx) {
-                    return val + (deltas[oscAddr][indx] * stepNum)
+                    return val + (deltas[key][indx] * stepNum);
                 }
             );
-            singlePacket.address = oscAddr;
+            singlePacket.address = key;
             singlePacket.args = oscArgs;
-            packets.push(singlePacket); // add the packet to the bundle
-        }
+            packets.push(singlePacket);
+        });
         timedOscBundleQueue.add(udp, packets, waitTime);
     };
     timedOscBundleQueue.start();
@@ -251,7 +250,9 @@ function bundleQueue() {
                 timeTag: osc.timeTag(),
                 packets: task.packets
             });
+            console.log("OUT IT GOES!");
             console.log(task.packets);
+            console.log("\n\n");
             task = null; // clear task
         }
         if (queue.length > 0) { // are there any remain tasks??
