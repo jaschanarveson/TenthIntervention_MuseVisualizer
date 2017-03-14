@@ -103,6 +103,7 @@ function setup() {
 
     funcs['3'] = bezier_lines_2;
     funcs['4'] = color_grid;
+    funcs['5'] = graph_lines;
 }
 
 function draw() {
