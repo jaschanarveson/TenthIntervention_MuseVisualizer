@@ -17,7 +17,7 @@ Right now, the **muse** object has the following data:
 
 There are Node.js apps running the background that are filtering and processing the OSC data from the Muse headband - this is split into two parts to allow for distributing the load across two computers, since reading the Muse and running the p5 sketch are both CPU intensive enough that I don't want to have it all happening on one machine during the concert.  Many OSC streams from the Muse run at 10Hz, and the Node.js apps interpolates this data to a smoother 60Hz.
 
-## What's the this project
+## What's in this project
 - Two Node.js apps: **appA.js** and **appB.js**
   - **appA.js** receives OSC data from the Muse headband on port 5000, processes it, and sends only selected data to **appB.js** on port 8888.  Interpolation from 10Hz to 60Hz is done here.
   - **appB.js** receives OSC from **appA.js** on port 8888 and forwards it to the **p5.js** sketch running in the browser
