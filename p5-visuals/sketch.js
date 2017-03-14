@@ -21,14 +21,15 @@ var port = new osc.WebSocketPort({
     url: "ws://localhost:8081"
 });
 
+var lastTime = 0;
+
 port.open();
 
 port.on("message", function (message) {
-    // osc messages are handles by the
+    // osc messages are handled by the
     // receiveOsc function defined at the bottom...
     receiveOsc(message.address, message.args);
-})
-
+});
 
 // - - actual p5.js sketch code - - 
 
