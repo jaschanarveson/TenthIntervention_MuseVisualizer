@@ -31,18 +31,6 @@ port.on("message", function (message) {
     receiveOsc(message.address, message.args);
 });
 
-port.on("bundle", function (bundle, timetag, info) {
-    console.log(bundle);
-    if (bundle.timeTag.native > lastTime) {
-        lastTime = bundle.timeTag.native;
-        for(var i = 0; i < bundle.packets.length; i++) {
-            var packet = bundle.packets[i];
-            receiveOsc(packet.address, packet.args);
-        }
-    }
-});
-
-
 // - - actual p5.js sketch code - - 
 
 // hold all the muse data in one place...

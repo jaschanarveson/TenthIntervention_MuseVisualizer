@@ -151,12 +151,12 @@ function wait_for_first_message() {
 
 function start_interpolation_loop() {
     console.log("Starting to send interpolated OSC data...");
-  //  setInterval(function () {
+    setInterval(function () {
         move_snapshot_to_lastSnapshot();
         take_snapshot();
         create_deltas(); // determine the diffs between current and previous snapshot
         send_out_a_round_of_interpolated_values(100, 6); // send out 6 OSC bundles of interpolated data in 100ms
-    //}, 100);
+    }, 100);
 
 }
 
@@ -186,7 +186,7 @@ function take_snapshot() {
 function create_deltas() {
     forEach(snapshot, function (value, key, obj) {
         deltas[key] = snapshot[key].map(function (currentVal, i) {
-            return lastSnapshot[key][i] - currentVal;
+            return currentVal - lastSnapshot[key][i];
         });
     });
 }
@@ -201,7 +201,7 @@ function send_out_a_round_of_interpolated_values(totalTime, intervals) {
             var singlePacket = {};
             var oscArgs = lastSnapshot[key].map(
                 function (val, indx) {
-                    return val + (deltas[key][indx] * stepNum);
+                    return val + ((deltas[key][indx] / intervals) * stepNum);
                 }
             );
             singlePacket.address = key;
@@ -250,9 +250,6 @@ function bundleQueue() {
                 timeTag: osc.timeTag(),
                 packets: task.packets
             });
-            console.log("OUT IT GOES!");
-            console.log(task.packets);
-            console.log("\n\n");
             task = null; // clear task
         }
         if (queue.length > 0) { // are there any remain tasks??
