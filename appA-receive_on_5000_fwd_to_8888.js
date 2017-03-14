@@ -202,7 +202,7 @@ function send_out_a_round_of_interpolated_values(totalTime, intervals) {
             var singlePacket = {};
             var oscArgs = lastSnapshot[oscAddr].map(
                 function (val, indx) {
-                    return val + (deltas[oscAddr] * stepNum)
+                    return val + (deltas[oscAddr][indx] * stepNum)
                 }
             );
             singlePacket.address = oscAddr;
@@ -251,6 +251,7 @@ function bundleQueue() {
                 timeTag: osc.timeTag(),
                 packets: task.packets
             });
+            console.log(task.packets);
             task = null; // clear task
         }
         if (queue.length > 0) { // are there any remain tasks??
