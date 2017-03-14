@@ -21,13 +21,26 @@ var port = new osc.WebSocketPort({
     url: "ws://localhost:8081"
 });
 
+var lastTime = 0;
+
 port.open();
 
 port.on("message", function (message) {
-    // osc messages are handles by the
+    // osc messages are handled by the
     // receiveOsc function defined at the bottom...
     receiveOsc(message.address, message.args);
-})
+});
+
+port.on("bundle", function (bundle, timetag, info) {
+    if (bundle.timeTag.native > lastTime) {
+        lastTime = bundle.timeTag.native;
+        for(var i = 0; i < bundle.packets.length; i++) {
+            var packet = bundle.packets[i];
+            console.log(packet);
+            receiveOsc(packet.address, packet.args);
+        }
+    }
+});
 
 
 // - - actual p5.js sketch code - - 
