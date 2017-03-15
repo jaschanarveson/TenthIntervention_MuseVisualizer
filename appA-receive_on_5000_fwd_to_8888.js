@@ -28,16 +28,6 @@ var snapshot = {};
 var lastSnapshot = {};
 var deltas = {};
 
-var oscPaths = [
-    "/muse/elements/delta_session_score",
-    "/muse/elements/theta_session_score",
-    "/muse/elements/alpha_session_score",
-    "/muse/elements/beta_session_score",
-    "/muse/elements/gamma_session_score",
-    "/muse/elements/experimental/concentration",
-    "/muse/elements/experimental/mellow"
-];
-
 var oscMessagesHaveArrived = false;
 
 
