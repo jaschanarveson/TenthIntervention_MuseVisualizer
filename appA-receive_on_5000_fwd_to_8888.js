@@ -9,30 +9,7 @@ This script takes OSC from the Muse headband (or recordings thereof), and does t
 - takes slow data (10Hz) and interpolates values to get smoother 60Hz output streams
 
 The OSC is forwarded to port 8888, where appB.js is listening and passing it on to p5.js in the browser.
-*/
 
-var osc = require("osc");
-var forEach = require("for-each");
-var timedOscBundleQueue = bundleQueue();
-
-var udp = new osc.UDPPort({
-    localAddress: "127.0.0.1", // receive locally from muse.io
-    localPort: 5000, // on port 5000, by default 
-    remoteAddress: "127.0.0.1", // send remotely to the p5 computer (insert appropriate address here)
-    remotePort: 8888 // on port 8888
-});
-
-
-var incomingValues = {};
-var snapshot = {};
-var lastSnapshot = {};
-var deltas = {};
-
-var oscMessagesHaveArrived = false;
-
-
-
-/*
 incoming osc data:
 
 fff (-2000 to 1996) 50Hz
@@ -52,8 +29,27 @@ ffff (0 to 1) 10Hz
 f (boolean: 0 or 1) 10Hz
 '/muse/elements/jaw_clench'
 '/muse/elements/blink'
+
 */
 
+var osc = require("osc");
+var forEach = require("for-each");
+var timedOscBundleQueue = bundleQueue();
+
+var udp = new osc.UDPPort({
+    localAddress: "127.0.0.1", // receive locally from muse.io
+    localPort: 5000, // on port 5000, by default
+    remoteAddress: "127.0.0.1", // send remotely to the p5 computer (insert appropriate address here)
+    remotePort: 8888 // on port 8888
+});
+
+
+var incomingValues = {};
+var snapshot = {};
+var lastSnapshot = {};
+var deltas = {};
+
+var oscMessagesHaveArrived = false;
 
 udp.on("message", function (message, timeTag, info) {
     // certain functions are logged (see log_message() below) to
