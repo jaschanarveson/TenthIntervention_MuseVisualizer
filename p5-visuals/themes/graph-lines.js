@@ -3,6 +3,7 @@ function graph_lines() {
     textAlign(LEFT);
     textSize(24);
     textFont("Courier");
+    rectMode(CORNER);
     background(123);
 
 

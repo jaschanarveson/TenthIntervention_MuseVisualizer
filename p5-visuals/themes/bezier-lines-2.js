@@ -28,14 +28,14 @@ function bezier_lines_2() {
     fill(137, 255, 0, 123);
 
     bezier(
-        muse.theta[0] * width,
-        muse.gamma[0] * height,
-        muse.theta[1] * width,
-        muse.gamma[1] * height,
-        muse.theta[2] * width,
-        muse.gamma[2] * height,
-        muse.theta[3] * width,
-        muse.gamma[3] * height
+        muse.beta[0] * height,
+        muse.alpha[0] * width,
+        muse.beta[1] * height,
+        muse.alpha[1] * width,
+        muse.beta[2] * height,
+        muse.alpha[2] * width,
+        muse.beta[3] * height,
+        muse.alpha[3] * width
     );
 
 }
