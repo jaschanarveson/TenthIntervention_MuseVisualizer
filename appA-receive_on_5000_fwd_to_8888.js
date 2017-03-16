@@ -10,9 +10,9 @@ This script takes OSC from the Muse headband (or recordings thereof), and does t
 
 Interpolation is done by in the start_interpolation_loop() function.
 
-- taking a snapshot of the values every 100ms
+- taking a snapshot of the values every 200ms
 - determining the deltas from the last snapshot to the current one
-- interpolate from previous to current values in 6 equally timed steps
+- interpolate from previous to current values in 12 equally timed steps (ie: at 60Hz)
 
 The OSC is forwarded to port 8888, where appB.js is listening and passing it on to p5.js in the browser.
 
@@ -148,8 +148,8 @@ function start_interpolation_loop() {
         move_snapshot_to_lastSnapshot();
         take_snapshot();
         create_deltas(); // determine the diffs between current and previous snapshot
-        send_out_a_round_of_interpolated_values(100, 6); // send out 6 OSC bundles of interpolated data in 100ms
-    }, 100);
+        send_out_a_round_of_interpolated_values(200, 12); // send out 6 OSC bundles of interpolated data in 100ms
+    }, 200);
 
 }
 
