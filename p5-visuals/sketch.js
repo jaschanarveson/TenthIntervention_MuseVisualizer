@@ -117,6 +117,8 @@ function draw() {
 }
 
 function overlayDataOnScreen() {
+    // Drawing functions should take nothing for granted!
+    // --> always set colorMode, rectMode, strokeWeight, ellipseMode, etc etc
     colorMode(RGB, 255);
     strokeWeight(0);
     rectMode(CORNER);
