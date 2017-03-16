@@ -3,6 +3,22 @@ Visualizing OSC data from the Muse headband for the Tenth Intervention concert o
 
 The idea is that each piece on the show will feature a different way of visualizing data from the Muse headband, which will be worn by a member of the group (or a friend/volunteer) throughout the show.
 
+Here'a a list of adjectives and composer names for the four pieces that need visualizations.  Since these are all premieres, there are no recordings of them - links to reference tracks that capture something of a similar mood are listed below, as well.  The reference track for Daniel Felsenfeld was sent as a Dropbox link in a private email that you should have.
+
+Composer: Tonia Ko - (Ecstasy)
+sounds like:  [https://www.youtube.com/watch?v=P-SMSWXz58w](https://www.youtube.com/watch?v=P-SMSWXz58w)
+
+Composer: Kate Soper - (Anxiety)
+sounds like:  [https://vimeo.com/50375211](https://vimeo.com/50375211)
+
+Composer: Dorian Wallace - (Fear)
+sounds like (part 1):  [https://www.youtube.com/watch?v=MRb1-SAAIzs](https://www.youtube.com/watch?v=MRb1-SAAIzs)
+sounds like (part 2):  [https://www.youtube.com/watch?v=wtZSdCqTmhI](https://www.youtube.com/watch?v=wtZSdCqTmhI)
+
+Composer: Daniel Felsenfeld - (Sensuality)
+
+
+
 ## Organization
 This project is set up as a p5.js sketch where the `draw()` loop selects a visualizing function (which I'm calling a **theme**) from the `p5-visuals/themes` folder.  Keyboard shortcuts are set up to allow for easy switch between the themes.  The ultimate idea is one theme per piece.
 
