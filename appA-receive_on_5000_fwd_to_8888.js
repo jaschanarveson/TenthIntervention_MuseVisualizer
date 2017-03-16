@@ -8,6 +8,12 @@ This script takes OSC from the Muse headband (or recordings thereof), and does t
 - only passes on desired data (there's A LOT of data coming off the Muse - too much to use)
 - takes slow data (10Hz) and interpolates values to get smoother 60Hz output streams
 
+Interpolation is done by in the start_interpolation_loop() function.
+
+- taking a snapshot of the values every 100ms
+- determining the deltas from the last snapshot to the current one
+- interpolate from previous to current values in 6 equally timed steps
+
 The OSC is forwarded to port 8888, where appB.js is listening and passing it on to p5.js in the browser.
 
 incoming osc data:
