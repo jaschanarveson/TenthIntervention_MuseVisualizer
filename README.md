@@ -43,9 +43,9 @@ There are Node.js apps running the background that are filtering and processing 
 
 ### A note on the Muse recordings
 
-As a rough way to sync the Muse data with the music videos I:
+As a rough way to sync the Muse data with the music videos I did the following:
 
-- cue up the video/audio on YouTube/Vimeo/etc
+- cued up the video/audio on YouTube/Vimeo/etc
 - started the Muse recording
 - blinked 4 times
 - on the 5th blink I pressed play on the music video/audio
