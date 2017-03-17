@@ -38,8 +38,17 @@ There are Node.js apps running the background that are filtering and processing 
   - **appA.js** receives OSC data from the Muse headband on port 5000, processes it, and sends only selected data to **appB.js** on port 8888.  Interpolation from 10Hz to 60Hz is done here.
   - **appB.js** receives OSC from **appA.js** on port 8888 and forwards it to the **p5.js** sketch running in the browser
 - A **p5.js** project that's running the actual visualization code
-- A folder called **z-test-data** that contains some recordings made with the Muse headband - these can be replayed via command-line and will trigger a stream of data that matches the original Muse stream.  Good for testing!
+- A folder called **z-test-data** that contains some recordings made with the Muse headband - these can be replayed via command-lines and will trigger a stream of data that matches the original Muse stream.  Good for testing!
 - four Bash executables (filenames starting with 01, 02, 03, and 04) that can be run together to start launch the Muse recording, the Node apps, and the p5 sketch.
+
+### A note on the Muse recordings
+
+As a rough way to sync the Muse data with the music videos I:
+
+- cue up the video/audio on YouTube/Vimeo/etc
+- started the Muse recording
+- blinked 4 times
+- on the 5th blink I pressed play on the music video/audio
 
 ## Installing and running this project
 1. download and install the [Muse Research Tools](http://developer.choosemuse.com/research-tools)
