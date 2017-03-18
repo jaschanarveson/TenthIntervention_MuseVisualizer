@@ -59,6 +59,7 @@ As a rough way to sync the Muse data with the music videos I did the following:
   - t = toggle text overlay
   - f = toggle fullscreen mode
   - [1,2,3,4] number keys toggle example sketches 1, 2, 3, and 4
+  - [z, x, c, v] currently toggle fadeins/fadeouts for title-screens for the Ko, Soper, Wallace, and Felsenfeld pieces (titles TBA, or I need to get them from Hajnal...)
   
 ## Adding a new theme
 - create a new .js file in the `p5-visuals` folder and name it according to your theme, eg: `my_lovely_theme.js`
