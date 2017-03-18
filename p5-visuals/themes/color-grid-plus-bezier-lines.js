@@ -1,5 +1,5 @@
 function color_grid_plus_bezier_lines() {
-    var gridmin = min([width / 128], [height / 128]);
+    var gridmin = min([width / 100], [height / 100]);
     var gridmax = min([width / 2, height / 2]);
     var x_spacing = map(muse.concentration, 0, 1, gridmin, gridmax);
     var y_spacing = map(muse.mellow, 0, 1, gridmin, gridmax);
@@ -26,11 +26,12 @@ function color_grid_plus_bezier_lines() {
     var centerX = width / 2;
     var centerY = height / 2;
 
-    for (var x = centerX - (squaresWide * x_spacing); x < width + x_spacing; x += x_spacing) {
-        for (var y = centerY - (squaredHigh * y_spacing); y < height + y_spacing; y += y_spacing) {
+    for (var x = centerX - (squaresWide * x_spacing) / 2; x < width + x_spacing; x += x_spacing) {
+        for (var y = centerY - (squaredHigh * y_spacing) / 2; y < height + y_spacing; y += y_spacing) {
 
-            stroke(map(dist(x, y, centerX, centerY), 0, longestLine, 0, maxSquares), maxSquares / 2, maxSquares / 2, maxSquares / 2);
-            fill(map(dist(x, y, centerX, centerY), 0, longestLine, 0, maxSquares), maxSquares / 2, maxSquares / 2, maxSquares / 2);
+            var fillCol = color(map(dist(x, y, centerX, centerY), 0, longestLine, 0, maxSquares), maxSquares / 2, maxSquares / 2, maxSquares / 2);
+            stroke(fillCol);
+            fill(fillCol);
             rect(x, y, x_spacing, y_spacing);
         }
     }
