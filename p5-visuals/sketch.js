@@ -65,13 +65,39 @@ var activeFunc = '1'; // this is the selector for which function to use in the d
 var textOverlay; // boolean indicating the presence or absence of text overlay for the muse data
 
 
+// for fading-in and fading-out info on title screens
+var titlescreen;
+
+var credit_hotkeys = {
+    z: {
+        composer: "Tanya Ko",
+        title: "(sounds like ecstasy)",
+        visuals: "whoever did the visuals"
+    },
+    x: {
+        composer: "Kate Soper",
+        title: "(sounds like anxiety)",
+        visuals: "whoever did the visuals"
+    },
+    c: {
+        composer: "Dorian Wallace",
+        title: "(sounds like fear)",
+        visuals: "whoever did the visuals"
+    },
+    v: {
+        composer: "Daniel Felsenfeld",
+        title: "(sounds like sensuality)",
+        visuals: "whoever did the visuals"
+    }
+};
+
 function setup() {
     createCanvas(windowWidth, windowHeight); // resizeable canvas (see windowResized() func at bottom)
 
     frameRate(30);
 
     textOverlay = true; // start with text overlay, just for reassurance that everything's working
-
+    titlescreen = makeTitlesAPI();
 
     /*    
     One way to write a theme is as a constructor function that returns an object with a draw() function, enabling that theme to have its own variables that persist across each iteration of the draw() loop.
@@ -114,6 +140,7 @@ function draw() {
     if (textOverlay) {
         overlayDataOnScreen();
     }
+    titlescreen.update();
 }
 
 function overlayDataOnScreen() {
@@ -192,9 +219,21 @@ function keyTyped() {
     } else if (key === 'f') {
         var fs = fullScreen();
         fullScreen(!fs);
+    } else if (credit_hotkeys[key] !== undefined) {
+        handle_titles(key);
     } else if (funcs[key] !== undefined) {
         console.log('key for active func pressed: ' + key);
         activeFunc = key;
+    }
+}
+
+function handle_titles(thekey) {
+    console.log("i am handling the title");
+    if (titlescreen.creditInfo === null) {
+        titlescreen.creditInfo = credit_hotkeys[thekey];
+        titlescreen.fadein();
+    } else {
+        titlescreen.fadeout();
     }
 }
 
