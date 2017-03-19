@@ -29,27 +29,27 @@ function grid_plus_bezier_lines() {
 
     // bezier lines
 
-//    var bands = ["delta", "theta", "alpha", "beta", "gamma"];
-//
-//    for (var i = 0; i < bands.length; i++) {
-//        var bandname = bands[i];
-//
-//        fill(360 * (i / bands.length), 360, 360, 60);
-//        stroke(360 * (i / bands.length), 360, 360, 60);
-//        //        fill(0, 0, 0, 100);
-//        bezier(
-//            // anchor 1
-//            0,
-//            height / 2,
-//            // control point 1
-//            muse[bandname][0] * width,
-//            map(muse[bandname][1], 0, 1, height, 0),
-//            // control point 2
-//            muse[bandname][2] * width,
-//            map(muse[bandname][3], 0, 1, height, 0),
-//            // anchor 2
-//            width,
-//            height / 2
-//        );
-//    };
+    var bands = ["delta", "theta", "alpha", "beta", "gamma"];
+
+    for (var i = 0; i < bands.length; i++) {
+        var bandname = bands[i];
+
+        fill(360 * (i / bands.length), 360, 360, 60);
+        stroke(360 * (i / bands.length), 360, 360, 60);
+        //        fill(0, 0, 0, 100);
+        bezier(
+            // anchor 1
+            0,
+            height / 2,
+            // control point 1
+            muse[bandname][0] * width,
+            map(muse[bandname][1], 0, 1, height, 0),
+            // control point 2
+            muse[bandname][2] * width,
+            map(muse[bandname][3], 0, 1, height, 0),
+            // anchor 2
+            width,
+            height / 2
+        );
+    };
 }
