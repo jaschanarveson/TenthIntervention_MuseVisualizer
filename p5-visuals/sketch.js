@@ -64,7 +64,6 @@ var activeFunc = '1'; // this is the selector for which function to use in the d
 
 var textOverlay; // boolean indicating the presence or absence of text overlay for the muse data
 
-
 // for fading-in and fading-out info on title screens
 var titlescreen;
 
@@ -130,7 +129,8 @@ function setup() {
     funcs['3'] = bezier_lines_3;
     funcs['4'] = color_grid_plus_bezier_lines;
     funcs['5'] = graph_lines;
-    funcs['6'] = color_grid_plus_bezier_lines;
+    funcs['6'] = bezier_lines_2;
+
 }
 
 function draw() {
@@ -218,8 +218,8 @@ function keyTyped() {
     if (key === 't') {
         textOverlay = !textOverlay;
     } else if (key === 'f') {
-        var fs = fullScreen();
-        fullScreen(!fs);
+        var fs = fullscreen();
+        fullscreen(!fs);
     } else if (credit_hotkeys[key] !== undefined) {
         handle_titles(key);
     } else if (funcs[key] !== undefined) {
