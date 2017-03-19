@@ -1,44 +1,35 @@
 function color_grid_plus_bezier_lines() {
-    var gridmin = min([width / 100], [height / 100]);
+    var gridmin = min([width / 64], [height / 64]);
     var gridmax = min([width / 2, height / 2]);
     var x_spacing = map(muse.concentration, 0, 1, gridmin, gridmax);
     var y_spacing = map(muse.mellow, 0, 1, gridmin, gridmax);
 
     strokeWeight(1);
-
-    colorMode(RGB, 255);
-    background(255);
-
-    var maxSquares = (width / gridmin) * (height / gridmin);
-
-    colorMode(HSB, maxSquares);
+    colorMode(HSB, 360);
     rectMode(CENTER);
+
+    background(360);
 
     var longestLine = dist(0, 0, width / 2, height / 2);
 
-
-    //    push();
-    //    translate(width / 2, height / 2);
-
     var squaresWide = floor(width / x_spacing);
-    var squaredHigh = floor(height / y_spacing);
-    console.log(squaresWide, squaredHigh);
+    var squaresHigh = floor(height / y_spacing);
+    var halfWide = ceil(squaresWide / 2);
+    var halfHigh = ceil(squaresHigh / 2);
     var centerX = width / 2;
     var centerY = height / 2;
 
-    for (var x = centerX - (squaresWide * x_spacing) / 2; x < width + x_spacing; x += x_spacing) {
-        for (var y = centerY - (squaredHigh * y_spacing) / 2; y < height + y_spacing; y += y_spacing) {
+//    stroke(190, 0, 190, 123);
+//    fill(123, 0, 123, 123);
+    for (var x = centerX - halfWide * x_spacing; x < width + x_spacing; x += x_spacing) {
+        for (var y = centerY - halfHigh * y_spacing; y < height + y_spacing; y += y_spacing) {
 
-            var fillCol = color(map(dist(x, y, centerX, centerY), 0, longestLine, 0, maxSquares), maxSquares / 2, maxSquares / 2, maxSquares / 2);
+            var fillCol = color(map(dist(x, y, centerX, centerY), 0, longestLine, 0, 360), 180, 180, 180);
             stroke(fillCol);
             fill(fillCol);
             rect(x, y, x_spacing, y_spacing);
         }
     }
-
-    //    pop();
-
-    colorMode(HSB, 360);
 
     var bands = ["delta", "theta", "alpha", "beta", "gamma"];
 

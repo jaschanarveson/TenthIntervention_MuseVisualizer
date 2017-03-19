@@ -130,6 +130,7 @@ function setup() {
     funcs['3'] = bezier_lines_3;
     funcs['4'] = color_grid_plus_bezier_lines;
     funcs['5'] = graph_lines;
+    funcs['6'] = grid_plus_bezier_lines;
 }
 
 function draw() {
