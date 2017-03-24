@@ -131,6 +131,7 @@ function setup() {
     funcs['5'] = graph_lines;
     funcs['6'] = bezier_lines_2;
     funcs['7'] = grid_plus_bezier_lines;
+    funcs['8'] = bezier_lines_4;
 
 }
 
