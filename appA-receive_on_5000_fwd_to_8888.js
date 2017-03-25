@@ -43,9 +43,12 @@ var forEach = require("for-each");
 var timedOscBundleQueue = bundleQueue();
 
 var udp = new osc.UDPPort({
-    localAddress: "127.0.0.1", // receive locally from muse.io
+    // local address should be set to actual network address of the computer
+    // NOT the usual 127.0.0.1.
+    // So: set this according to whatever machine you're running on.
+    localAddress: "jascha.local", // receive locally from muse.io
     localPort: 5000, // on port 5000, by default
-    remoteAddress: "127.0.0.1", // send remotely to the p5 computer (insert appropriate address here)
+    remoteAddress: "jascha.local", // send remotely to the p5 computer (insert appropriate address here)
     remotePort: 8888 // on port 8888
 });
 
