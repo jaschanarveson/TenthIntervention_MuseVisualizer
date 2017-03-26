@@ -29,7 +29,7 @@ var udp = new osc.UDPPort({
     // local address should be set to actual network address of the computer
     // NOT the usual 127.0.0.1.
     // So: set this according to whatever machine you're running on.
-    localAddress: "0.0.0.0",
+    localAddress: "jascha.local",
     localPort: 8888
 });
 

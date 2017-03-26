@@ -109,7 +109,7 @@ function setup() {
 
     var ikeda_lines = new Ikeda_lines(20); // in this case, 20 divisions in the stripes
 
-    dorian = new create_dorian_theme();
+    //dorian = new create_dorian_theme();
 
     /*
     KEYBOARD COMMANDS:
@@ -133,7 +133,7 @@ function setup() {
     funcs['5'] = graph_lines;
     funcs['6'] = bezier_lines_2;
     funcs['7'] = grid_plus_bezier_lines;
-    funcs['8'] = dorian.draw;
+    //funcs['8'] = dorian.draw;
 
 }
 
@@ -244,5 +244,5 @@ function handle_titles(thekey) {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-    dorian.resetPixelArray();
+    //dorian.resetPixelArray();
 }
