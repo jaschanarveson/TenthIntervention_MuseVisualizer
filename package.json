@@ -9,6 +9,7 @@
   "author": "Jascha Narveson",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.15.2",
     "for-each": "^0.3.2",
     "osc": "^2.2.0",
     "ws": "^2.2.0"
