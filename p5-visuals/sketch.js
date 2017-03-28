@@ -71,22 +71,22 @@ var credit_hotkeys = {
     z: {
         composer: "Tanya Ko",
         title: "(sounds like ecstasy)",
-        visuals: "whoever did the visuals"
+        visuals: "Jascha Narveson"
     },
     x: {
         composer: "Kate Soper",
         title: "(sounds like anxiety)",
-        visuals: "whoever did the visuals"
+        visuals: "Jascha Narveson"
     },
     c: {
         composer: "Dorian Wallace",
         title: "(sounds like fear)",
-        visuals: "whoever did the visuals"
+        visuals: "Jascha Narveson"
     },
     v: {
         composer: "Daniel Felsenfeld",
         title: "(sounds like sensuality)",
-        visuals: "whoever did the visuals"
+        visuals: "Jascha Narveson"
     }
 };
 
@@ -124,16 +124,14 @@ function setup() {
     */
 
     funcs['1'] = test_circles;
-
     // this one was made by a constructor, so we refer to its .draw function
-    funcs['2'] = ikeda_lines.draw;
-
-    funcs['3'] = bezier_lines_3;
-    funcs['4'] = color_grid_plus_bezier_lines;
-    funcs['5'] = graph_lines;
-    funcs['6'] = bezier_lines_2;
-    funcs['7'] = grid_plus_bezier_lines;
-    funcs['8'] = dorian.draw;
+    funcs['2'] = ikeda_lines.draw; // kate?
+//    funcs['3'] = bezier_lines_3;
+    funcs['3'] = dorian.draw; // dorian
+    funcs['4'] = color_grid_plus_bezier_lines; // danny?
+//    funcs['5'] = graph_lines;
+//    funcs['6'] = bezier_lines_2;
+//    funcs['7'] = grid_plus_bezier_lines;
 
 }
 

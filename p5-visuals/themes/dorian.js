@@ -28,7 +28,7 @@ function create_dorian_theme() {
         fill(255, 0, 0, 123);
 
         push();
-        translate(width / 2, 0);
+        translate(width / 3, 0);
         rotate(radians(45));
 
         for (var i = 0; i < bands.length; i++) {
@@ -70,10 +70,11 @@ function create_dorian_theme() {
             for (var y = 0; y < height; y++) {
                 var indx = (y * width + x) * 4;
                 if (pixels[indx] > 123) {
+//                    var half = Math.floor(self.img.pixels[indx] / 2);
                     pixels[indx] = self.img.pixels[indx];
-                    pixels[indx + 1] = self.img.pixels[indx + 1];
-                    pixels[indx + 2] = self.img.pixels[indx + 2];
-                    pixels[indx + 3] = self.img.pixels[indx + 3];
+                    pixels[indx + 1] = 0; // self.img.pixels[indx + 1];
+                    pixels[indx + 2] = 0; // self.img.pixels[indx + 2];
+                    pixels[indx + 3] = 123; // self.img.pixels[indx + 3];
                 }
             }
         }
