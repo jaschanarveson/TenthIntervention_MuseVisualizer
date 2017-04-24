@@ -25,6 +25,7 @@ var server = app.listen(app.get("port"), function() {
 
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.use('/p5-visuals', express.static(__dirname + '/p5-visuals'));
+app.use('/media', express.static(__dirname + '/media'));
 
 var udp = new osc.UDPPort({
     // local address should be set to actual network address of the computer
