@@ -2,7 +2,7 @@ function create_dorian_theme() {
     var self = this;
 
     self.img = loadImage(
-        'images/wolf-in-suit.png',
+        'media/wolf-in-suit.png',
         function () {
             console.log("dorian image loaded");
             self.resetPixelArray();
