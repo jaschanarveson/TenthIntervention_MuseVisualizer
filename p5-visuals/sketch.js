@@ -90,7 +90,6 @@ var credit_hotkeys = {
     }
 };
 
-var dorian;
 
 function setup() {
     createCanvas(windowWidth, windowHeight); // resizeable canvas (see windowResized() func at bottom)
@@ -108,8 +107,10 @@ function setup() {
     */
 
     var ikeda_lines = new Ikeda_lines(20); // in this case, 20 divisions in the stripes
-
-    dorian = new create_dorian_theme();
+    var dorian_pic1 = new create_dorian_pic("../media/wolf-pic-1.JPG");
+    var dorian_pic2 = new create_dorian_pic("../media/wolf-pic-2.JPG");
+    var dorian_mov1 = new create_dorian_movie("../media/wolf-video1.mp4");
+    var dorian_mov2 = new create_dorian_movie("../media/wolf-video2.mp4");
 
     /*
     KEYBOARD COMMANDS:
@@ -124,15 +125,11 @@ function setup() {
     */
 
     funcs['1'] = test_circles;
-    // this one was made by a constructor, so we refer to its .draw function
     funcs['2'] = ikeda_lines.draw; // kate?
-//    funcs['3'] = bezier_lines_3;
-    funcs['3'] = dorian.draw; // dorian
-    funcs['4'] = color_grid_plus_bezier_lines; // danny?
-//    funcs['5'] = graph_lines;
-//    funcs['6'] = bezier_lines_2;
-//    funcs['7'] = grid_plus_bezier_lines;
-
+    funcs['3'] = color_grid_plus_bezier_lines; // danny?
+    funcs['4'] = dorian_pic1.draw; // dorian
+    funcs['5'] = dorian_pic2.draw;
+    funcs['6'] = dorian_mov1.draw;
 }
 
 function draw() {
