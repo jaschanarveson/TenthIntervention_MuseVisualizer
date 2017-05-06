@@ -32,18 +32,21 @@ function makeTitlesAPI() {
                     console.log("updating: " + API.counter);
                     colorMode(RGB, API.fadeTime);
                     rectMode(CORNER);
-                    textSize(14);
-                    textAlign(CENTER, CENTER);
-                    textFont("Ariel")
-                    var string = "";
-                    for (prop in API.creditInfo) {
-                        string += prop + ": " + API.creditInfo[prop] + "\n";
-                    }
-                    noStroke();
                     fill(0, 0, 0, API.counter);
                     rect(0, 0, width, height);
                     fill(API.fadeTime, API.fadeTime, API.fadeTime, API.counter);
-                    text(string, 0, 0, width, height);
+
+                    textSize(24);
+                    textAlign(CENTER);
+                    textFont("Ariel");
+                    textStyle(NORMAL);
+                    noStroke();
+                    text(API.creditInfo["composer"], 0, height/2 - 40, width, 40);
+                    textStyle(ITALIC);
+                    text(API.creditInfo["title"], 0, height/2, width, 40);
+                    textStyle(NORMAL);
+                    textSize(20);
+                    text("visuals: " + API.creditInfo["visuals"], 0, height/2 + 40, width, 40);
 
                     API.counter += API.countStep;
                     if (API.counter > API.fadeTime) {

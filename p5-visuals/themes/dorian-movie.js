@@ -5,20 +5,23 @@ function create_dorian_movie(movpath) {
         console.log(movpath + " loaded");
     });
     self.movie.hide();
-    self.movie.pause();
+    self.movie.stop();
 
     self.draw = function () {
         colorMode(RGB, 255);
         background(123);
-        image(self.movie, 0, 0);
+        text("i shouldn't be able to see this", 300, 300);
+        image(self.movie, 10, 10);
     };
 
-    self.go = function () {
-        self.movie.loop();
-//        self.movie.time(0);
+    self.play = function () {
+        console.log("playing movie " + movpath);
+        console.log(self.movie);
+        self.movie.play();
     }
 
     self.stop = function () {
+        console.log("stopping movie " + movpath);
         self.movie.stop();
     }
 }

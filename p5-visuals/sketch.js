@@ -61,6 +61,7 @@ var museProps = Object.keys(muse);
 // hold the different visualizer functions defined in the 'themes' folder
 var funcs = {};
 var activeFunc = '1'; // this is the selector for which function to use in the draw() loop
+var movies = {};
 
 var textOverlay; // boolean indicating the presence or absence of text overlay for the muse data
 
@@ -69,75 +70,73 @@ var titlescreen;
 
 var credit_hotkeys = {
     z: {
-        composer: "Tanya Ko",
-        title: "(sounds like ecstasy)",
-        visuals: "Jascha Narveson"
+        composer: "David Bird",
+        title: "Thresholds",
+        visuals: "David Bird remixing Speed (1994)"
     },
     x: {
-        composer: "Kate Soper",
-        title: "(sounds like anxiety)",
+        composer: "Tanya Ko",
+        title: "Breath, contained",
         visuals: "Jascha Narveson"
     },
     c: {
-        composer: "Dorian Wallace",
-        title: "(sounds like fear)",
+        composer: "Kate Soper",
+        title: "Only the Words Themselves Mean What They Say",
         visuals: "Jascha Narveson"
     },
     v: {
         composer: "Daniel Felsenfeld",
-        title: "(sounds like sensuality)",
+        title: "Insomnia Redux: 4am",
         visuals: "Jascha Narveson"
+    },
+    b: {
+        composer: "Dorian Wallace",
+        title: "The Wolf Twin Murders",
+        visuals: "Jascha Narveson / Dorian Wallace"
+    },
+    n: {
+        composer: "",
+        title: "",
+        visuals: ""
     }
 };
 
-var dorian_mov1, dorian_mov2;
+var opening_mov, dorian_mov1, dorian_mov2;
 
 function setup() {
     createCanvas(windowWidth, windowHeight); // resizeable canvas (see windowResized() func at bottom)
-
     frameRate(30);
 
     textOverlay = true; // start with text overlay, just for reassurance that everything's working
     titlescreen = makeTitlesAPI();
 
-    /*    
-    One way to write a theme is as a constructor function that returns an object with a draw() function, enabling that theme to have its own variables that persist across each iteration of the draw() loop.
-    
-    
-    the ikeda_lines demo is one such:
-    */
 
     var ikeda_lines = new Ikeda_lines(20); // in this case, 20 divisions in the stripes
     var dorian_pic1 = new create_dorian_pic("../media/wolf-pic-1.JPG");
     var dorian_pic2 = new create_dorian_pic("../media/wolf-pic-2.JPG");
-    dorian_mov1 = new create_dorian_movie("../media/bla.mov");
-    dorian_mov2 = new create_dorian_movie("../media/wolf-video2.mp4");
+    var soft_squares = new Softies(5); // seven squares across
+
 
     /*
-    KEYBOARD COMMANDS:
-    
-    Store the different 'themes' functions in the funcs object using keyboard characters as property names, to allow for keyboard shortcuts.
-    
-    Existing commands (see keyTyped() function at end):
-    
-    't' = toggle for text-overlay
-    'f' = full-screen mode
-    
+    Dorian:
+     0:00 - Video 1
+     1:38 - data-viz pic 1
+     9:41+ - data-viz pic 2
+    13:20 - Video 2
     */
 
-    funcs['1'] = test_circles;
-    funcs['2'] = ikeda_lines.draw; // kate?
-    funcs['3'] = color_grid_plus_bezier_lines; // danny?
-    funcs['4'] = dorian_pic1.draw; // dorian
-    funcs['5'] = dorian_pic2.draw;
-    funcs['6'] = dorian_mov1.draw;
-    funcs['7'] = dorian_mov2.draw;
+    funcs['1'] = black_screen; //
+    funcs['2'] = color_grid_plus_bezier_lines; // tanya
+    funcs['3'] = ikeda_lines.draw; // kate
+    funcs['4'] = soft_squares.draw; // danny
+    funcs['5'] = dorian_pic1.draw; // dorian
+    funcs['6'] = dorian_pic2.draw;
+
 }
 
 function draw() {
 
     funcs[activeFunc]();
-
 
     if (textOverlay) {
         overlayDataOnScreen();
@@ -217,8 +216,9 @@ For the band arrays, appA.js is adding the average of the 4-element array to the
 
 function keyTyped() {
 
-    dorian_mov1.stop();
-    dorian_mov2.stop();
+    //    opening_mov.stop();
+    //    dorian_mov1.stop();
+    //    dorian_mov2.stop();
 
     if (key === 't') {
         textOverlay = !textOverlay;
@@ -230,11 +230,9 @@ function keyTyped() {
     } else if (funcs[key] !== undefined) {
         console.log('key for active func pressed: ' + key);
         activeFunc = key;
-    }
-
-    if (key === '6') {
-        console.log("also playing dorian movie 1");
-        dorian_mov1.go();
+        //        if(movies[key] !== undefined) {
+        //            movies[key].play();
+        //        }
     }
 }
 

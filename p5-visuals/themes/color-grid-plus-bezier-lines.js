@@ -1,5 +1,5 @@
 function color_grid_plus_bezier_lines() {
-    var gridmin = min([width / 64], [height / 64]);
+    var gridmin = min([width / 48], [height / 48]);
     var gridmax = min([width / 2, height / 2]);
     var x_spacing = map(muse.concentration, 0, 1, gridmin, gridmax);
     var y_spacing = map(muse.mellow, 0, 1, gridmin, gridmax);
